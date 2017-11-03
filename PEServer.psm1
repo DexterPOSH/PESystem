@@ -190,7 +190,7 @@ class PEDiskController: SHiPSDirectory
         {
             $obj += [PEDisk]::new()
         }
-
+        return $obj
     }
 }
 

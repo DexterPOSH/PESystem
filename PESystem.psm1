@@ -14,7 +14,7 @@ class PESystem: ShiPSDirectory {
 
     }
 
-    [object[]]GetChildItem()
+    [object[]] GetChildItem()
     {
         $obj = @()
         # fetch the CIM session for the PEDRAC servers
@@ -24,7 +24,7 @@ class PESystem: ShiPSDirectory {
         {
             $obj += [PEServer]::new($PEDRACSession)
         }
-        return $Obj
+        return $obj
     }
     
 }
