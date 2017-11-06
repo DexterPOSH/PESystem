@@ -15,8 +15,9 @@ class PEServer: ShiPSDirectory
     [version]$CPLD
     # LC version
     [version]$LCVersion
+    [object]$SysInformation
     # Hidden reference to the IDRACSession
-    Hidden [object]$IDRACSession
+    Hidden [object]$iDRACSession
     
 
     PEServer([string]$name): base($name)
@@ -26,17 +27,24 @@ class PEServer: ShiPSDirectory
 
     PEServer ([object]$iDRACSession): base($IDRACSession.ComputerName)
     {
-        $this.iRACSession = $iDRACSession
+        $this.iDRACSession = $iDRACSession
+        $SysInfo  = (& "DellPEWSManTools\Get-PESystemInformation" -iDRACSession $this.iDRACSession)
+        $this.SysInformation = $SysInfo
+        $this.BIOS = $SysInfo.BIOSVersionString
+        $this.Model = $SysInfo.Model 
+        $this.CPLD = $SysInfo.CPLDVersion
+        $this.ServiceTag = $SysInfo.ChassisServiceTag
+
     }
 
     [object[]] GetChildItem()
     {
         # here this would return the 
         $obj = @()
-        $obj += [Processor]::new($this.IDRACSession)
-        $obj += [Memory]::new($this.IDRACSession)
-        $obj += [Network]::new($this.IDRACSession)
-        $obj += [DiskStorage]::new($this.IDRACSession)
+        $obj += [Processor]::new($this.iDRACSession)
+        $obj += [Memory]::new($this.iDRACSession)
+        $obj += [Network]::new($this.iDRACSession)
+        $obj += [DiskStorage]::new($this.iDRACSession)
         return $obj
     }
 
