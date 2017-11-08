@@ -17,12 +17,11 @@ class PESystem: ShiPSDirectory {
     [object[]]GetChildItem()
     {
         $obj = @()
-        # fetch the CIM session for the PEDRAC servers
-        # IDRAC
-        $PEDRACSessions = (& "$Script:CimCmdlets\Get-CIMSession")
-        foreach ($PEDRACSession in $PEDRACSessions)
+        # fetch the SCP Json files in the current path and map them
+        $Files = @(Get-ChildItem -Path $PSScriptRoot -Filter *.json)
+        foreach ($File in $Files)
         {
-            $obj += [PEServer]::new($PEDRACSession)
+            $obj += [PEServer]::new($File.BaseName,$File.FullName)
         }
         return $Obj
     }
